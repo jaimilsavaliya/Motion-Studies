@@ -1,0 +1,11 @@
+.dg-playground .ms-iframe-wrap { height:560px; background:#120f17; }
+.dg-playground .ms-iframe-wrap.mobile { height:640px; }
+.dg-playground .ms-iframe-wrap iframe { display:block; width:100%; height:100%; border:0; }
+.dg-playground .ms-color-input { display:flex; align-items:center; gap:10px; min-height:32px; }
+.dg-scenes { grid-column:1 / -1; }
+.dg-scenes > span { display:block; margin:4px 0 8px; font:400 11px/1 ui-monospace,monospace; color:#8b8697; }
+.dg-scene-list { display:flex; flex-wrap:wrap; gap:6px; }
+.dg-scene-list button { padding:5px 10px; color:#cfc9dc; background:#ffffff0f; border:1px solid #ffffff24; border-radius:16px; font:400 11px/1.3 ui-monospace,monospace; cursor:pointer; }
+.dg-scene-list button.active { color:#0b0a10; background:#d9d2ff; border-color:#d9d2ff; }
+.dg-scene-list button:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+@media(max-width:600px){ .dg-playground .ms-iframe-wrap { height:470px; } .dg-playground .ms-iframe-wrap.mobile { height:590px; } }

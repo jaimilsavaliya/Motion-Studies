@@ -1,0 +1,5 @@
+.dv-playground .dv-source-input { grid-column:span 2; }
+.dv-playground .dv-color-input > div { display:flex; align-items:center; gap:10px; min-height:32px; }
+.dv-playground .dv-color-input input[type="color"] { width:32px; height:28px; flex:none; padding:2px; cursor:pointer; border:1px solid var(--ms-border,#333); border-radius:5px; background:transparent; }
+.dv-playground .dv-color-input code { font-size:11px; color:var(--ms-muted,#999); }
+@media(max-width:600px) { .dv-playground .dv-source-input { grid-column:1 / -1; } }

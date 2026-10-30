@@ -1,0 +1,21 @@
+.parallax-carousel { position: relative; width: 100%; color: #a1a1aa; font-family: system-ui, sans-serif; }
+.parallax-carousel * { box-sizing: border-box; }
+.parallax-carousel__viewport { position: relative; width: 100%; height: calc(var(--pc-height, 600px) + 24px); overflow: hidden; user-select: none; cursor: grab; touch-action: pan-y; mask-image: linear-gradient(to right, transparent, #000 var(--pc-fade, 80px), #000 calc(100% - var(--pc-fade, 80px)), transparent); }
+.parallax-carousel__viewport[data-dragging='true'] { cursor: grabbing; }
+.parallax-carousel__viewport:focus-visible { outline: 2px solid #a1a1aa; outline-offset: -2px; }
+.parallax-carousel__track { position: absolute; left: 0; top: 12px; display: flex; width: max-content; gap: var(--pc-gap, 12px); will-change: transform; }
+.parallax-carousel__card { position: relative; flex-shrink: 0; width: var(--pc-width, 320px); height: var(--pc-height, 600px); overflow: hidden; border-radius: var(--pc-radius, 12px); background: #18181b; }
+.parallax-carousel__card > img { position: absolute; top: 0; left: calc(-1 * var(--pc-parallax, 60px)); width: calc(100% + 2 * var(--pc-parallax, 60px)); max-width: none; height: 100%; object-fit: cover; pointer-events: none; will-change: transform; }
+.parallax-carousel__fallback { display: grid; place-items: center; height: 100%; width: calc(100% + 2 * var(--pc-parallax, 60px)); position: absolute; left: calc(-1 * var(--pc-parallax, 60px)); background: #202028; color: #c5c5cb; padding: 24px; text-align: center; font-size: 12px; }
+.parallax-carousel__controls { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 8px; max-width: 100%; flex-wrap: wrap; font-size: 10px; line-height: 1.5; }
+.parallax-carousel__controls > button { display: grid; place-items: center; min-width: 30px; min-height: 28px; padding: 5px 10px; border: 1px solid #ffffff26; border-radius: 20px; background: #111; color: #b4b4bc; font: inherit; cursor: pointer; }
+.parallax-carousel__controls > button:hover:not(:disabled) { background: #242428; color: #fff; }
+.parallax-carousel__controls button:focus-visible { outline: 2px solid #b5d690; outline-offset: 3px; }
+.parallax-carousel__controls button:disabled { opacity: .4; cursor: default; }
+.parallax-carousel__controls > span { white-space: nowrap; font-size: 9px; margin-left: 4px; }
+.parallax-carousel__dots { display: flex; gap: 4px; align-items: center; }
+.parallax-carousel__dots button { width: 20px; height: 24px; padding: 7px; border: 0; background: transparent; cursor: pointer; }
+.parallax-carousel__dots button::after { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: #555; }
+.parallax-carousel__dots button[aria-current='true']::after { background: #d4d4d8; }
+.parallax-carousel__empty { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font-size: 14px; }
+.parallax-carousel__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }

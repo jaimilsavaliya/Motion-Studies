@@ -1,0 +1,63 @@
+.shutter-gallery {
+  position: relative; display: flex; width: 100%; min-width: 0;
+  container-type: size; gap: var(--sg-gap, 12px); isolation: isolate;
+  color: white; font-family: Arial, Helvetica, sans-serif;
+}
+.shutter-gallery, .shutter-gallery * { box-sizing: border-box; }
+.shutter-gallery .sg-panel {
+  position: relative; display: block; flex-basis: 0; min-width: 0; min-height: 0;
+  margin: 0; padding: 0; border: 0; border-radius: 0; overflow: hidden;
+  background: #09090b; color: white; text-align: left; cursor: pointer;
+  appearance: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  transition: flex-grow 480ms cubic-bezier(.275,.035,.184,1);
+}
+.shutter-gallery .sg-panel:focus-visible { outline: 2px solid #fffc; outline-offset: 3px; z-index: 1; }
+.shutter-gallery .sg-image {
+  position: absolute; top: 0; left: 50%; width: 100cqw; height: 100%; max-width: none;
+  object-fit: cover; translate: -50% 0; transform: scale(1.08);
+  pointer-events: none; user-select: none;
+  transition: transform 980ms cubic-bezier(.276,.873,.132,1);
+}
+.shutter-gallery .sg-panel[aria-expanded=true] .sg-image { transform: scale(1); }
+.shutter-gallery .sg-shade {
+  position: absolute; inset: 0; background: black; opacity: .78; pointer-events: none;
+  transition: opacity 400ms cubic-bezier(.23,1,.32,1);
+}
+.shutter-gallery .sg-panel[data-peek=true] .sg-shade { opacity: .4; }
+.shutter-gallery .sg-panel[aria-expanded=true] .sg-shade { opacity: 0; }
+.shutter-gallery .sg-label {
+  position: absolute; bottom: 20px; left: 50%; translate: -50% 0; rotate: 180deg;
+  writing-mode: vertical-rl; white-space: nowrap; color: #fff9;
+  font: 400 11px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .2em; text-transform: uppercase; pointer-events: none;
+  transition: opacity 150ms ease-out;
+}
+.shutter-gallery .sg-panel[aria-expanded=true] .sg-label { opacity: 0; }
+.shutter-gallery .sg-caption {
+  position: absolute; bottom: 0; left: 0; width: 100%; padding: 80px 24px 24px;
+  background: linear-gradient(transparent, #0005 45%, #000b);
+  opacity: 0; filter: blur(4px); transform: translateY(8px); pointer-events: none;
+  transition: opacity 150ms ease-out, filter 150ms ease-out, transform 150ms ease-out;
+}
+.shutter-gallery .sg-panel[aria-expanded=true] .sg-caption {
+  opacity: 1; filter: blur(0); transform: translateY(0);
+  transition: opacity 350ms cubic-bezier(.23,1,.32,1) 250ms,
+    filter 350ms cubic-bezier(.23,1,.32,1) 250ms, transform 350ms cubic-bezier(.23,1,.32,1) 250ms;
+}
+.shutter-gallery .sg-title { display: block; font-size: 24px; font-weight: 600; line-height: 1.3; letter-spacing: -.025em; }
+.shutter-gallery .sg-subtitle { display: block; margin-top: 8px; color: #ffffffa6; font: 400 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .05em; text-transform: uppercase; }
+.shutter-gallery .sg-fallback { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(135deg,#251719,#111); }
+.shutter-gallery .sg-fallback > span { opacity: 0; color: #fff9; font: 12px monospace; }
+.shutter-gallery .sg-panel[aria-expanded=true] .sg-fallback > span { opacity: 1; }
+.shutter-gallery .sg-empty { margin: auto; color: #888; font-size: 14px; }
+.shutter-gallery[data-vertical=true] { flex-direction: column; gap: calc(var(--sg-gap, 12px) / 2); }
+.shutter-gallery[data-vertical=true] .sg-image { top: 50%; left: 0; width: 100%; height: 100cqh; translate: 0 -50%; }
+.shutter-gallery[data-vertical=true] .sg-label { top: 50%; bottom: auto; left: 16px; translate: 0 -50%; rotate: 0deg; writing-mode: horizontal-tb; }
+.shutter-gallery[data-vertical=true] .sg-caption { padding: 48px 16px 16px; }
+@media (max-width: 639px) { .shutter-gallery .sg-title { font-size: 20px; } }
+@media (prefers-reduced-motion: reduce) {
+  .shutter-gallery .sg-panel, .shutter-gallery .sg-image, .shutter-gallery .sg-shade, .shutter-gallery .sg-label { transition: none; }
+  .shutter-gallery .sg-caption, .shutter-gallery .sg-panel[aria-expanded=true] .sg-caption {
+    transform: none; filter: none; transition: opacity 150ms ease-out;
+  }
+}

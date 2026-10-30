@@ -1,0 +1,7 @@
+node_modules/
+dist/
+test-artifacts/
+.cache/
+.npm/
+*.log
+__pycache__/

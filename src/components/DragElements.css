@@ -1,0 +1,6 @@
+.drag-elements { position:relative; isolation:isolate; width:100%; min-width:0; }
+.drag-elements, .drag-elements * { box-sizing:border-box; }
+.drag-elements>.de-item { position:absolute; width:max-content; touch-action:none; user-select:none; cursor:grab; outline:none; }
+.drag-elements>.de-item[data-dragging=true] { cursor:grabbing; }
+.drag-elements>.de-item:focus-visible:not([data-pointer-selected="true"]) { outline:2px solid currentColor; outline-offset:6px; border-radius:3px; }
+.drag-elements .de-sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; padding:0; margin:-1px; }

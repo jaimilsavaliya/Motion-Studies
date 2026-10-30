@@ -1,0 +1,8 @@
+.pc-preview { position:relative; width:100%; min-height:100svh; background:#120f17; }
+.pc-preview > .paper-crumple { width:100%; height:100svh; min-height:100svh; }
+.pc-preview-back,.pc-preview-controls { position:absolute; z-index:5; color:#f4f0e8; border:1px solid #ffffff26; background:#120f17df; border-radius:24px; padding:7px 11px; font:10px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
+.pc-preview-back { top:16px; left:18px; }
+.pc-preview-controls { right:18px; bottom:16px; display:flex; align-items:center; gap:9px; }
+.pc-preview-controls button { border:1px solid #ffffff2b; background:#ffffff12; color:inherit; border-radius:16px; padding:3px 9px; font:inherit; cursor:pointer; }
+.pc-preview-back:focus-visible,.pc-preview-controls button:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+@media(max-width:620px){ .pc-preview-controls { left:18px; right:auto; } }

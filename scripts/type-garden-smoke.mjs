@@ -1,0 +1,54 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+import {mkdirSync,readFileSync} from 'node:fs';
+const b=await chromium.launch(),base=process.env.TEST_URL||'http://localhost:5173';
+const context=await b.newContext({viewport:{width:1200,height:850},permissions:['clipboard-read','clipboard-write']});
+const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+const dir='test-artifacts/type-garden/exports';mkdirSync(dir,{recursive:true});
+const input=()=>p.getByLabel('Type to grow a garden',{exact:true});
+const canvas=()=>p.locator('.tg-canvas');
+const hash=()=>canvas().evaluate(c=>{const a=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let s=0;for(let i=0;i<a.length;i+=11)s=(s*31+a[i])>>>0;return s;});
+const download=async(button,name)=>{const event=p.waitForEvent('download',{timeout:60000});await button.click();const file=await event;assert.equal(file.suggestedFilename(),name);await file.saveAs(`${dir}/${name}`);return readFileSync(`${dir}/${name}`);};
+try{
+ await p.goto(`${base}/preview/type-garden?exportSize=256&exportFps=6`,{waitUntil:'networkidle'});
+ assert.equal(await input().inputValue(),'');assert.equal(await p.getByRole('button',{name:'PNG',exact:true}).isDisabled(),true);
+ await p.keyboard.type('abc',{delay:60});await p.waitForTimeout(1000);assert.equal(await input().inputValue(),'abc');const first=await hash();
+ await p.keyboard.press('Space');await p.keyboard.type('de');assert.equal(await input().inputValue(),'abc de');
+ await p.keyboard.press('Backspace');assert.equal(await input().inputValue(),'abc d');
+ await p.keyboard.press('Enter');assert.equal(await input().inputValue(),'');await p.waitForTimeout(450);
+ await input().fill('hello garden');await p.waitForTimeout(950);assert.notEqual(await hash(),first);
+ const png=await download(p.getByRole('button',{name:'PNG',exact:true}),'type-garden.png');assert.equal(png.subarray(1,4).toString(),'PNG');assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),850);
+ const svg=await download(p.getByRole('button',{name:'SVG',exact:true}),'type-garden.svg');assert.ok(svg.toString().includes('data:'));assert.ok(svg.toString().includes('<path'));assert.ok(svg.toString().includes('Type Garden Serif'));
+ await p.getByRole('button',{name:'Copy SVG',exact:true}).click();await p.getByText('SVG code copied',{exact:true}).waitFor();assert.ok((await p.evaluate(()=>navigator.clipboard.readText())).startsWith('<svg'));
+ for(const name of ['Paper','Midnight','Citrus','Orchid','Moss','Tomato','Butter','Blush','Mono','Rose noir']){await p.getByRole('button',{name,exact:true}).click();assert.equal(await p.locator('.type-garden').getAttribute('data-palette'),name);}
+ await input().fill('<script>alert("x")</script>🌿');await p.waitForTimeout(100);const escaped=await download(p.getByRole('button',{name:'SVG',exact:true}),'type-garden.svg');assert.equal(escaped.toString().includes('<script>'),false);assert.ok(escaped.toString().includes('&lt;'));
+ await p.getByRole('tab',{name:'Poster',exact:true}).click();assert.equal(await p.getByLabel('WORDS',{exact:true}).inputValue(),'in bloom');await p.getByLabel('WORDS',{exact:true}).fill('grow gently');await p.waitForTimeout(150);
+ await p.emulateMedia({reducedMotion:'reduce'});await p.waitForTimeout(100);const old=await hash();await p.waitForTimeout(180);assert.equal(await hash(),old,'reduced motion must be still');
+ await p.getByRole('button',{name:'Regrow garden',exact:true}).click();await p.waitForTimeout(100);assert.notEqual(await hash(),old);await p.emulateMedia({reducedMotion:'no-preference'});
+ const states=[];
+ for(const [label,id] of [['Breathe','breathe'],['Grow & wither','grow'],['Typed','typed'],['Gust','gust'],['Reach','reach'],['Scatter','scatter'],['Visitor','visitor']]){await p.getByRole('button',{name:new RegExp('^'+label.replace('&','&'))}).click();assert.equal(await p.locator('.type-garden').getAttribute('data-motion'),id);await p.waitForTimeout(100);states.push(await hash());}
+ assert.equal(new Set(states).size,7,'seven distinct motion frames');
+ await p.getByRole('button',{name:/^Breathe/}).click();await p.getByRole('button',{name:'Rose noir',exact:true}).click();
+ const frames=await download(p.getByRole('button',{name:'PNG frames (.zip)',exact:true}),'type-garden-frames.zip');assert.equal(frames.readUInt32LE(0),0x04034b50);
+ const video=await download(p.getByRole('button',{name:'Export MP4 loop',exact:true}),'type-garden.mp4');assert.ok(video.length>1000);assert.equal(video.subarray(4,8).toString(),'ftyp');
+ const metadata=await p.evaluate(async data=>{const video=document.createElement('video');video.src='data:video/mp4;base64,'+data;await new Promise((resolve,reject)=>{video.onloadedmetadata=resolve;video.onerror=reject;});return {width:video.videoWidth,height:video.videoHeight,duration:video.duration};},video.toString('base64'));
+ assert.equal(metadata.width,256);assert.equal(metadata.height,256);assert.ok(metadata.duration>2&&metadata.duration<5);console.log('Video metadata',metadata);
+ await p.getByRole('button',{name:'Export MP4 loop',exact:true}).click();await p.getByRole('button',{name:'Cancel',exact:true}).click();await p.getByText('Export cancelled',{exact:true}).waitFor();
+ await p.getByRole('tab',{name:'Type',exact:true}).click();assert.ok((await input().inputValue()).includes('script'));await p.keyboard.press('Enter');assert.equal(await input().inputValue(),'');
+ await p.goto(`${base}/components/type-garden`,{waitUntil:'networkidle'});await p.getByRole('heading',{name:'Type Garden',exact:true}).waitFor();await p.screenshot({path:'test-artifacts/type-garden/docs.png'});
+ await p.getByRole('button',{name:'Customize',exact:true}).click();await p.getByLabel('Initial words',{exact:true}).fill('wild words');await p.getByLabel('Starting mode',{exact:true}).selectOption('poster');await p.getByLabel('Starting palette',{exact:true}).selectOption('Paper');await p.getByLabel('Bloom density',{exact:true}).fill('1.5');
+ await p.getByRole('tab',{name:'Usage',exact:true}).click();const code=await p.locator('#playground-panel pre').innerText();assert.ok(code.includes('initialText={"wild words"}')&&code.includes('initialMode={"poster"}')&&code.includes('density={1.5}'));
+ await p.getByRole('tab',{name:'Component',exact:true}).click();assert.ok((await p.locator('#playground-panel pre').innerText()).includes('function TypeGarden'));
+ await p.locator('#playground-panel .ms-copy').click();await p.locator('#playground-panel').getByRole('button',{name:'Copied',exact:true}).waitFor();
+ await p.getByRole('tab',{name:'CSS',exact:true}).click();assert.ok((await p.locator('#playground-panel pre').innerText()).includes('.tg-canvas'));
+ await download(p.getByRole('link',{name:'Download files',exact:true}),'type-garden.zip');
+ await p.getByRole('button',{name:'Reset',exact:true}).click();assert.equal(await p.getByLabel('Initial words',{exact:true}).inputValue(),'');
+ await p.setViewportSize({width:390,height:844});await p.waitForTimeout(200);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+ const mobile=await b.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});mobile.on('pageerror',e=>errors.push(e.message));await mobile.goto(`${base}/preview/type-garden?embed=1&maxLength=5`,{waitUntil:'networkidle'});
+ await mobile.locator('.tg-canvas').tap();assert.equal(await mobile.getByLabel('Type to grow a garden').evaluate(e=>e===document.activeElement),true);
+ await mobile.getByLabel('Type to grow a garden').fill('abcdef🌼');assert.equal(await mobile.getByLabel('Type to grow a garden').inputValue(),'abcde');
+ await mobile.getByLabel('Type to grow a garden').fill('🌼🌿é');assert.equal(await mobile.getByLabel('Type to grow a garden').inputValue(),'🌼🌿é');
+ await mobile.getByRole('tab',{name:'Poster',exact:true}).tap();await mobile.waitForTimeout(150);const art=await mobile.locator('.tg-canvas').boundingBox(),editor=await mobile.locator('.tg-editor').boundingBox();assert.ok(editor.y>=art.y+art.height);assert.ok(Math.abs(art.width-art.height)<1);assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await mobile.screenshot({path:'test-artifacts/type-garden/mobile-qa.png'});await mobile.close();
+ assert.deepEqual(errors,[]);
+ console.log('PASS: Type Garden typing/cut/wither/clear, palette selection, Unicode/limits, seven motions, reduced motion/regrow, real PNG/SVG/ZIP/MP4 exports, clipboard, cancellation, mode persistence, docs/customization/source/copy/download and mobile layout/input.');
+}finally{await b.close();}

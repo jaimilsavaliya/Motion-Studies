@@ -1,0 +1,30 @@
+.focus-scale { position: relative; width: 100%; color: #f4f4f5; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.focus-scale * { box-sizing: border-box; }
+.focus-scale__stage { position: relative; isolation: isolate; width: 100%; height: calc(var(--fs-height) + 2 * var(--fs-label-space)); overflow: hidden; touch-action: pan-y; user-select: none; outline-offset: -2px; mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent); }
+.focus-scale__stage:focus-visible { outline: 2px solid #a1a1aa; }
+.focus-scale__stage[data-dragging=true] { cursor: grabbing; }
+.focus-scale__card { position: absolute; left: 50%; top: 50%; margin-left: calc(-.5 * var(--fs-width)); margin-top: calc(-.5 * var(--fs-height)); width: var(--fs-width); height: var(--fs-height); padding: 0; border: 0; border-radius: var(--fs-radius); overflow: hidden; background: #27272a; will-change: transform; cursor: pointer; color: inherit; }
+.focus-scale__card[aria-current=true] { cursor: default; }
+.focus-scale__card:focus-visible { outline: 2px solid #b5d690; outline-offset: 3px; }
+.focus-scale__card > img { width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
+.focus-scale__fallback { display: grid; place-items: center; width: 100%; height: 100%; padding: 20px; background: #25252e; font: 14px/1.5 system-ui,sans-serif; }
+.focus-scale__collection, .focus-scale__title { position: absolute; left: 0; right: 0; height: var(--fs-label-space); display: flex; justify-content: center; pointer-events: none; z-index: 60; text-align: center; line-height: 1.5; }
+.focus-scale__collection { top: 0; align-items: flex-end; padding-bottom: var(--fs-label-top); color: #71717a; font-size: var(--fs-collection-size); letter-spacing: .06em; }
+.focus-scale__title { bottom: 0; align-items: flex-start; padding-top: var(--fs-label-bottom); font-size: var(--fs-title-size); letter-spacing: .02em; }
+.focus-scale__collection > span, .focus-scale__title > span { max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; animation: focus-caption 280ms cubic-bezier(.22,1,.36,1) both; }
+.focus-scale__frame { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: calc(var(--fs-width) + 2 * var(--fs-frame-padding)); height: calc(var(--fs-height) + 2 * var(--fs-frame-padding)); pointer-events: none; z-index: 55; }
+.focus-scale__frame i { position: absolute; width: var(--fs-corner); height: var(--fs-corner); border-color: currentColor; border-style: solid; border-width: 0; }
+.focus-scale__frame i:nth-child(1) { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+.focus-scale__frame i:nth-child(2) { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+.focus-scale__frame i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+.focus-scale__frame i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+.focus-scale__controls { position: absolute; top: calc(100% + 18px); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; color: #909098; font: 10px/1.5 system-ui,sans-serif; white-space: nowrap; }
+.focus-scale__controls button { min-width: 30px; min-height: 28px; padding: 5px 10px; border: 1px solid #ffffff26; border-radius: 20px; color: #b4b4bc; background: #111; cursor: pointer; font: inherit; }
+.focus-scale__controls button:hover:not(:disabled) { color: #fff; background: #222; }
+.focus-scale__controls button:focus-visible { outline: 2px solid #b5d690; outline-offset: 3px; }
+.focus-scale__controls button:disabled { opacity: .4; cursor: default; }
+.focus-scale__controls > span { font-size: 9px; padding-left: 5px; }
+.focus-scale__empty { position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; color: #888; }
+.focus-scale__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+@keyframes focus-caption { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media(prefers-reduced-motion:reduce) { .focus-scale__collection > span, .focus-scale__title > span { animation: none; } }

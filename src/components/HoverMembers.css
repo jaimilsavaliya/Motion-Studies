@@ -1,0 +1,19 @@
+@font-face { font-family:'MS Thunder'; src:url('./hover-members/Thunder-BlackLC.otf') format('opentype'); font-weight:900; font-style:normal; font-display:swap; }
+.hover-members { position:relative; display:flex; align-items:center; justify-content:center; width:100%; min-width:0; height:720px; overflow:hidden; isolation:isolate; container-type:inline-size; color:var(--hm-default,#fff); }
+.hover-members, .hover-members * { box-sizing:border-box; }
+.hover-members .hm-strip { position:absolute; top:10%; z-index:3; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; width:max-content; max-width:90%; height:120px; }
+.hover-members .hm-profile { display:block; flex-shrink:0; width:60px; height:60px; margin:0; padding:5px; appearance:none; border:0; border-radius:0; background:none; color:inherit; cursor:pointer; transition:width 200ms ease-out,height 200ms ease-out; -webkit-tap-highlight-color:transparent; }
+.hover-members .hm-profile[aria-pressed=true] { width:120px; height:120px; }
+.hover-members .hm-profile img, .hover-members .hm-avatar-fallback { display:block; width:100%; height:100%; border-radius:8px; object-fit:cover; user-select:none; }
+.hover-members .hm-avatar-fallback { display:grid; place-items:center; background:#383838; color:white; font:700 18px/1 sans-serif; text-transform:uppercase; }
+.hover-members .hm-profile:focus-visible { outline:2px solid var(--hm-hover); outline-offset:-2px; border-radius:10px; }
+.hover-members .hm-text-window { position:relative; width:100%; height:22cqw; overflow:hidden; }
+.hover-members .hm-word { position:absolute; inset:0; width:100%; text-align:center; user-select:none; pointer-events:none; font:900 calc(28cqw * var(--hm-fit,1))/1 var(--hm-font-family,'MS Thunder'),Impact,sans-serif; text-transform:uppercase; }
+.hover-members .hm-letters { display:inline-block; white-space:pre; margin-top:calc(9.8cqw * (1 - var(--hm-fit,1))); }
+.hover-members .hm-letters>span { display:inline-block; will-change:transform; }
+.hover-members .hm-cursor { position:absolute; top:0; left:0; z-index:4; width:120px; height:120px; pointer-events:none; transform:translate3d(var(--hm-x,0px),var(--hm-y,0px),0); }
+.hover-members .hm-cursor-disc { display:grid; place-items:center; width:100%; height:100%; border-radius:50%; background:var(--hm-cursor); color:#fff; transform-origin:top left; transform:scale(0); transition:transform 400ms cubic-bezier(.22,1,.36,1); }
+.hover-members .hm-cursor[data-visible=true] .hm-cursor-disc { transform:scale(1); }
+.hover-members .hm-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@container(max-width:767px) { .hover-members .hm-profile { padding:2.5px; } }
+@media(prefers-reduced-motion:reduce) { .hover-members .hm-profile { transition:none; } .hover-members .hm-cursor { display:none; } .hover-members .hm-letters>span { will-change:auto; } }

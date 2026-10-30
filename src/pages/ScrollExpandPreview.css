@@ -1,0 +1,8 @@
+.ms-scroll-expand-preview { position:relative; width:100%; min-height:100svh; color:#fff; font-family:Arial,Helvetica,sans-serif; }
+.ms-scroll-expand-preview.is-scroller { height:100svh; overflow:hidden; }
+.se-preview-holder { position:relative; width:100%; min-height:200px; }
+.se-preview-back,.se-preview-readout { position:absolute; z-index:3; color:#e8e4f0; background:#120f17d9; border:1px solid #ffffff26; border-radius:24px; padding:7px 11px; font:10px/1.5 ui-monospace,monospace; }
+.se-preview-back { top:16px; left:18px; }
+.se-preview-readout { bottom:16px; right:18px; display:flex; gap:10px; align-items:center; }
+.se-preview-readout button { color:inherit; background:#ffffff14; border:1px solid #ffffff2e; border-radius:16px; padding:3px 9px; font:inherit; cursor:pointer; }
+.se-preview-back:focus-visible,.se-preview-readout button:focus-visible { outline:2px solid #fff; outline-offset:3px; }

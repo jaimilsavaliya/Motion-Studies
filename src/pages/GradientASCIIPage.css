@@ -1,0 +1,12 @@
+.ascii-playground .ms-iframe-wrap { background:#101016; }
+.ga-color-editor { grid-column:1/-1; }
+.ga-color-editor>span { display:flex; justify-content:space-between; margin-bottom:12px; font-size:10px; color:var(--muted); }
+.ga-color-editor small { font:8px monospace; color:var(--faint); letter-spacing:1px; }
+.ga-color-editor>div { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.ga-color-editor label { position:relative; display:flex; align-items:center; gap:6px; }
+.ga-color-editor input[type=color] { appearance:none; width:42px; height:30px; padding:2px; border:1px solid var(--border); background:var(--surface); border-radius:6px; cursor:pointer; }
+.ga-color-editor input[type=color]::-webkit-color-swatch-wrapper { padding:0; }
+.ga-color-editor input[type=color]::-webkit-color-swatch { border:0; border-radius:3px; }
+.ga-color-editor label>span { font:8px monospace; color:var(--faint); margin:0; }
+.ga-color-editor button { border:1px solid var(--border); width:30px; height:30px; border-radius:6px; font-size:16px; color:var(--muted); }
+.ga-color-editor button:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }

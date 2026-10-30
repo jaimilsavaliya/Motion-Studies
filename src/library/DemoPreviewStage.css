@@ -1,0 +1,3 @@
+@media(max-width:600px) {
+  .ms-demo-preview-stage { --ms-demo-preview-gutter:16px; }
+}

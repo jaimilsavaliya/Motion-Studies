@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'MS Caveat'; src: url('./polaroid-flip-card/Caveat.ttf') format('truetype');
+  font-weight: 400 700; font-style: normal; font-display: swap;
+}
+.polaroid-flip-card {
+  --pf-x: 0; --pf-y: 0; --pf-flight: 0; --pf-stretch: 1; --pf-turn: 0deg;
+  --pf-paper: #18181b; --pf-edge: #27272a; --pf-ink: #d4d4d8; --pf-line: #ffffff0d;
+  --pf-shadow-color: #000c; --pf-shadow-base: .55; --pf-lift: 0px;
+  position: relative; display: block; flex-shrink: 0; max-width: 100%; aspect-ratio: 88 / 107;
+  container-type: inline-size; perspective: 1100px;
+  padding: 0; border: 0; margin: 0; border-radius: 6px; background: transparent;
+  color: var(--pf-ink); font-family: 'MS Caveat', cursive; font-weight: 400;
+  text-align: left; cursor: pointer; user-select: none; appearance: none;
+  -webkit-tap-highlight-color: transparent; touch-action: pan-y;
+  transform: translateY(var(--pf-lift)) rotate(var(--pf-rest-rotation, -3deg));
+  transition: transform 500ms cubic-bezier(.22,1,.36,1);
+}
+.polaroid-flip-card, .polaroid-flip-card * { box-sizing: border-box; }
+.polaroid-flip-card[data-theme=light] { --pf-paper: #fff; --pf-edge: #e4e4e7; --pf-ink: #3f3f46; --pf-line: #0000000a; --pf-shadow-color: #0006; }
+.polaroid-flip-card[data-flipped=true] { transform: translateY(var(--pf-lift)) rotate(0deg); }
+.polaroid-flip-card[data-hover=true] { --pf-lift: -6px; --pf-shadow-base: .7; }
+.polaroid-flip-card:focus-visible { outline: 2px solid #a1a1aa; outline-offset: 5px; }
+.polaroid-flip-card .pf-shadow {
+  position: absolute; left: 6%; right: 6%; top: 10%; bottom: 2%; border-radius: 3cqw;
+  background: var(--pf-shadow-color); filter: blur(5cqw); pointer-events: none;
+  opacity: calc(var(--pf-shadow-base) - var(--pf-flight) * .2);
+  transform: translateX(calc(var(--pf-x) * -5%)) translateY(calc(6% - var(--pf-y) * 3% + var(--pf-flight) * 6%)) scaleX(var(--pf-stretch));
+}
+.polaroid-flip-card .pf-tilt, .polaroid-flip-card .pf-turn { display: block; position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.polaroid-flip-card .pf-tilt {
+  transform: rotateX(calc(var(--pf-y) * var(--pf-tilt) * -.8)) rotateY(calc(var(--pf-x) * var(--pf-tilt)));
+  transition: transform 280ms cubic-bezier(.2,.8,.2,1);
+}
+.polaroid-flip-card .pf-turn { transform: scale(calc(1 + var(--pf-flight) * .07)) rotateY(var(--pf-turn)); }
+.polaroid-flip-card .pf-edge, .polaroid-flip-card .pf-face { position: absolute; inset: 0; border-radius: 1.2cqw; }
+.polaroid-flip-card .pf-edge { display: block; background: var(--pf-edge); pointer-events: none; }
+.polaroid-flip-card .pf-face {
+  display: flex; overflow: hidden; background: var(--pf-paper); color: var(--pf-ink);
+  box-shadow: inset 0 0 0 1px var(--pf-line); backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.polaroid-flip-card .pf-front { flex-direction: column; padding: 5.5% 5.5% 0; transform: translateZ(.6cqw); }
+.polaroid-flip-card .pf-photo { position: relative; display: block; flex-shrink: 0; width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--pf-edge); }
+.polaroid-flip-card .pf-photo::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px #0000000f, inset 0 2px 10px #0000001f; pointer-events: none; }
+.polaroid-flip-card .pf-photo img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; pointer-events: none; }
+.polaroid-flip-card .pf-caption { display: flex; flex: 1; min-height: 0; align-items: center; justify-content: center; padding: 0 4%; text-align: center; font-size: 7cqw; line-height: 1; overflow-wrap: anywhere; overflow: hidden; }
+.polaroid-flip-card .pf-back { align-items: center; justify-content: center; padding: 10%; transform: rotateY(180deg) translateZ(.6cqw); }
+.polaroid-flip-card .pf-note { display: block; max-height: 100%; overflow: auto; scrollbar-width: thin; white-space: pre-line; overflow-wrap: anywhere; text-align: center; font-size: 6.4cqw; line-height: 1.25; }
+.polaroid-flip-card .pf-glare {
+  position: absolute; inset: -50%; pointer-events: none; mix-blend-mode: overlay;
+  background: radial-gradient(circle, #ffffff8c, #fff0 40%); opacity: 0;
+  transform: translate(calc(var(--pf-x) * 25%), calc(var(--pf-y) * 25%)); transition: opacity 220ms ease;
+}
+.polaroid-flip-card .pf-back .pf-glare { transform: translate(calc(var(--pf-x) * -25%), calc(var(--pf-y) * 25%)); }
+.polaroid-flip-card[data-hover=true] .pf-glare { opacity: 1; }
+.polaroid-flip-card .pf-fallback { display: grid; height: 100%; place-items: center; padding: 10%; text-align: center; font: 12px/1.5 sans-serif; color: var(--pf-ink); }
+@media (prefers-reduced-motion: reduce) {
+  .polaroid-flip-card { --pf-lift: 0px !important; transition: none; }
+  .polaroid-flip-card .pf-tilt { transform: none; transition: none; }
+  .polaroid-flip-card .pf-glare { display: none; }
+}

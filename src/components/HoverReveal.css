@@ -1,0 +1,65 @@
+.hover-reveal {
+  --hr-bg: #09090b;
+  --hr-fg: #f4f4f5;
+  --hr-muted: rgb(244 244 245 / 25%);
+  --hr-subtle: rgb(244 244 245 / 15%);
+  --hr-border: #27272a;
+  position: relative;
+  width: 100%;
+  max-width: 1152px;
+  overflow: hidden;
+  border: 1px solid var(--hr-border);
+  border-radius: var(--hr-radius, 18px);
+  background: var(--hr-bg);
+  color: var(--hr-fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  container: hover-reveal / inline-size;
+}
+.hover-reveal[data-theme='light'] {
+  --hr-bg: #fafafa;
+  --hr-fg: #18181b;
+  --hr-muted: rgb(24 24 27 / 25%);
+  --hr-subtle: rgb(24 24 27 / 15%);
+  --hr-border: #e4e4e7;
+}
+.hover-reveal, .hover-reveal * { box-sizing: border-box; }
+.hover-reveal__layout { display: grid; grid-template-columns: 1fr; }
+.hover-reveal__media { position: relative; min-width: 0; overflow: hidden; aspect-ratio: 4 / 5; background: #19191a; }
+.hover-reveal__motion { position: absolute; inset: 0; will-change: transform; }
+.hover-reveal__image { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; will-change: transform, opacity; user-select: none; }
+.hover-reveal__index { min-width: 0; padding: 24px 16px; }
+.hover-reveal__label { margin: 0 0 16px; color: #a1a1aa; font-size: 10px; font-weight: 400; line-height: 15px; letter-spacing: 4px; text-transform: uppercase; }
+.hover-reveal__list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--hr-border); }
+.hover-reveal__list li { margin: 0; padding: 0; border-bottom: 1px solid var(--hr-border); }
+.hover-reveal__list li:last-child { border-bottom: 0; }
+.hover-reveal__list button {
+  position: relative; display: flex; align-items: baseline; gap: 12px; width: 100%;
+  padding: 14px 0; border: 0; border-radius: 0; background: none;
+  color: var(--hr-muted); font: inherit; text-align: left; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.hover-reveal__list button:focus-visible { outline: 1px solid var(--hr-fg); outline-offset: -1px; background: color-mix(in srgb, var(--hr-fg) 3%, transparent); }
+.hover-reveal__number { flex-shrink: 0; align-self: flex-start; padding-top: 12px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; font-weight: 400; line-height: 15px; letter-spacing: -0.05em; color: var(--hr-subtle); transition: color 300ms; }
+.hover-reveal__name { display: block; min-width: 0; font-size: 28px; font-weight: 500; line-height: 1.02; letter-spacing: -0.03em; color: var(--hr-muted); transform: skewX(0deg); transform-origin: center; overflow-wrap: anywhere; transition: color 500ms, letter-spacing 500ms cubic-bezier(.22,1,.36,1), transform 500ms cubic-bezier(.22,1,.36,1); }
+.hover-reveal__list button[aria-current='true'] .hover-reveal__name { color: var(--hr-fg); letter-spacing: -0.045em; transform: skewX(-3deg); }
+.hover-reveal__list button[aria-current='true'] .hover-reveal__number { color: color-mix(in srgb, var(--hr-fg) 60%, transparent); }
+.hover-reveal__sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.hover-reveal__empty { padding: 48px 24px; text-align: center; font-size: 13px; color: #a1a1aa; }
+.hover-reveal__unavailable { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: #19191a; color: #f4f4f5; font-size: 24px; }
+.hover-reveal__unavailable small { font-size: 11px; color: #a1a1aa; }
+@container hover-reveal (min-width: 638px) {
+  .hover-reveal__index { padding: 40px 32px; }
+  .hover-reveal__list button { gap: 20px; padding: 24px 0; }
+  .hover-reveal__name { font-size: 48px; }
+}
+@container hover-reveal (min-width: 766px) {
+  .hover-reveal__layout { grid-template-columns: 1fr 1.1fr; }
+  .hover-reveal__index { padding: 56px 48px; }
+  .hover-reveal__name { font-size: clamp(42px, 5.22cqw, 60px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hover-reveal__motion { transform: none !important; will-change: auto; }
+  .hover-reveal__image { will-change: auto; }
+  .hover-reveal__name, .hover-reveal__number { transition: none; }
+  .hover-reveal__list button[aria-current='true'] .hover-reveal__name { transform: none; }
+}

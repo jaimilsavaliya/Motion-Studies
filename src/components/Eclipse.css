@@ -1,0 +1,37 @@
+.eclipse {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  isolation: isolate;
+  container-type: size;
+  pointer-events: none;
+}
+
+.eclipse__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+}
+
+.eclipse__canvas.is-ready { opacity: 1; }
+
+/* Static, texture-free fallback when WebGL is unavailable or lost. */
+.eclipse__fallback {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(calc(var(--eclipse-size, 41) * 1cqw), calc(var(--eclipse-size, 41) * 1cqh));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #000;
+  border: 1px solid var(--eclipse-color, #eef0ff);
+  box-shadow: 0 0 3px 1px var(--eclipse-color, #eef0ff),
+              0 0 22px 4px var(--eclipse-color, #eef0ff),
+              0 0 80px 12px color-mix(in srgb, var(--eclipse-color, #eef0ff), transparent 70%);
+  opacity: var(--eclipse-intensity, 1);
+}

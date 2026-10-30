@@ -1,0 +1,7 @@
+.msp-demo { position:relative; width:100%; max-width:660px; overflow:hidden; border-radius:16px; background:#fafafa; }
+.msp-demo-marquee { transform:scale(1.05); }
+.msp-artwork { transition:transform .3s ease-in-out; }
+.msp-artwork img { width:100%; height:auto; aspect-ratio:1; object-fit:cover; pointer-events:none; }
+@media(hover:hover) { .msp-artwork:hover { transform:scale(1.5); } }
+.msp-demo-marquee>.msp-controls { bottom:28px; transform:translateX(-50%) scale(.95238); }
+@media(prefers-reduced-motion:reduce) { .msp-artwork { transition:none; } .msp-artwork:hover { transform:none; } }

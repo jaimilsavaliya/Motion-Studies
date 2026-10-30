@@ -1,0 +1,2 @@
+.ms-flex-carousel-preview { position:relative; width:100%; height:100svh; min-height:280px; background:#111016; }
+.fxc-preview-back { position:absolute; top:16px; left:20px; z-index:4; padding:7px 10px; border-radius:20px; color:#bbb9c7; background:#111016b3; font:10px/1.5 monospace; }

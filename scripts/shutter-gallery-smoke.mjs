@@ -1,0 +1,103 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { mkdirSync } from 'node:fs';
+const base = process.env.TEST_URL || 'http://localhost:5173';
+const dir = 'test-artifacts/shutter-gallery';
+mkdirSync(dir, {recursive:true});
+const browser = await chromium.launch();
+const page = await browser.newPage({viewport:{width:1200,height:850}});
+const errors=[]; page.on('pageerror', e=>errors.push(e.message));
+const panel = i=>page.locator('.sg-panel').nth(i);
+const pause = ()=>page.waitForTimeout(1050);
+const near = (actual, expected, message)=>assert.ok(Math.abs(actual-expected)<.15, `${message}: ${actual} vs ${expected}`);
+try {
+  await page.goto(`${base}/preview/shutter-gallery?embed=1`, {waitUntil:'networkidle'});
+  assert.equal(await panel(0).getAttribute('aria-expanded'),'false');
+  assert.equal(await page.locator('.sg-panel').count(),8);
+  const rect=await page.locator('.shutter-gallery').boundingBox();
+  near(rect.width,1136,'gallery width'); near(rect.height,520,'gallery height'); near(rect.y,165,'centered');
+  near((await panel(0).boundingBox()).width,131.5,'rest width');
+  const motion = await panel(2).evaluate(button=>new Promise(resolve=>{
+    const samples=[]; const start=performance.now(); button.click();
+    const frame=()=>{ const t=performance.now()-start;
+      samples.push({t,grow:Number(getComputedStyle(button).flexGrow),caption:Number(getComputedStyle(button.querySelector('.sg-caption')).opacity),scale:Number(getComputedStyle(button.querySelector('img')).transform.split('(')[1].split(',')[0])});
+      if(t<1050) requestAnimationFrame(frame); else resolve(samples);
+    }; requestAnimationFrame(frame);
+  }));
+  const early=motion.find(s=>s.t>100), middle=motion.find(s=>s.t>350), late=motion.find(s=>s.t>600);
+  assert.ok(early.grow>1 && early.grow<12.6 && early.caption===0,'caption waits for expansion');
+  assert.ok(middle.caption>0 && middle.caption<1,'caption reveals after delay');
+  assert.equal(late.grow,12.6); assert.ok(late.scale>1 && late.scale<1.005,'unzoom outlasts panel movement');
+  await panel(2).evaluate(e=>e.click()); await pause();
+  await panel(2).hover(); await pause(); near((await panel(2).boundingBox()).width,170.09375,'peek width');
+  await panel(2).click(); await page.mouse.move(10,10); await pause();
+  near((await panel(2).boundingBox()).width,676.296875,'open width');
+  near(await panel(2).locator('img').evaluate(el=>parseFloat(getComputedStyle(el).width)),1136,'fixed image crop');
+  assert.equal(await panel(2).locator('.sg-caption').evaluate(el=>getComputedStyle(el).opacity),'1');
+  await page.screenshot({path:`${dir}/desktop.png`});
+  await panel(4).hover(); await pause(); near((await panel(4).boundingBox()).width,83.328125,'peek with selection');
+  await panel(4).click(); await page.mouse.move(10,10); await pause();
+  assert.equal(await panel(4).getAttribute('aria-expanded'),'true'); assert.equal(await panel(2).getAttribute('aria-expanded'),'false');
+  await panel(4).click(); await page.mouse.move(10,10); await pause(); assert.equal(await page.locator('.sg-panel[aria-expanded=true]').count(),0);
+  await page.reload({waitUntil:'networkidle'}); await page.keyboard.press('Tab'); await pause();
+  assert.equal(await panel(0).evaluate(e=>e===document.activeElement),true); near((await panel(0).boundingBox()).width,170.09375,'keyboard peek');
+  await page.keyboard.press('Enter'); await pause(); assert.equal(await panel(0).getAttribute('aria-expanded'),'true');
+  await page.keyboard.press('End'); await page.keyboard.press('Space'); await pause(); assert.equal(await panel(7).getAttribute('aria-expanded'),'true');
+  await page.keyboard.press('Escape'); await pause(); assert.equal(await page.locator('.sg-panel[aria-expanded=true]').count(),0);
+  assert.equal(await panel(7).evaluate(e=>e===document.activeElement),true);
+  // Measure the container, not the viewport; exactly 576 remains horizontal.
+  for (const [width,vertical] of [[576,false],[575,true],[900,false]]) {
+    await page.locator('.shutter-gallery').evaluate((e,w)=>e.style.width=`${w}px`,width); await page.waitForTimeout(100);
+    assert.equal(await page.locator('.shutter-gallery').getAttribute('data-vertical'),String(vertical));
+  }
+  await page.emulateMedia({reducedMotion:'reduce'}); await panel(3).click(); await page.mouse.move(10,10); await page.waitForTimeout(30);
+  assert.equal(await panel(3).evaluate(e=>getComputedStyle(e).flexGrow),'12.6');
+  assert.equal(await panel(3).locator('img').evaluate(e=>getComputedStyle(e).transform),'matrix(1, 0, 0, 1, 0, 0)');
+  assert.equal(await panel(3).locator('.sg-caption').evaluate(e=>getComputedStyle(e).filter),'none');
+  const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  mobile.on('pageerror',e=>errors.push(e.message));
+  await mobile.goto(`${base}/preview/shutter-gallery?embed=1`,{waitUntil:'networkidle'});
+  const m=mobile.locator('.sg-panel').nth(2);
+  near((await m.boundingBox()).height,59.75,'mobile rest height');
+  await m.tap(); await mobile.waitForTimeout(1050);
+  assert.equal(await m.getAttribute('aria-expanded'),'true'); near((await m.boundingBox()).height,307.265625,'mobile open height');
+  near(await m.locator('img').evaluate(e=>parseFloat(getComputedStyle(e).height)),520,'fixed vertical crop');
+  assert.equal(await mobile.locator('.sg-panel[data-peek=true]').count(),0,'touch skips peek');
+  assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await mobile.screenshot({path:`${dir}/mobile.png`}); await m.tap(); await mobile.waitForTimeout(550);
+  assert.equal(await mobile.locator('.sg-panel[aria-expanded=true]').count(),0); await mobile.close();
+  // Standalone prop contracts, outside the library wrapper.
+  await page.evaluate(async()=>{
+    const React=(await import('/node_modules/.vite/deps/react.js')).default;
+    const {createRoot}=(await import('/node_modules/.vite/deps/react-dom_client.js')).default;
+    const {default:Gallery}=await import('/src/components/ShutterGallery.jsx');
+    const {shutterGalleryItems:items}=await import('/src/library/shutterGalleryItems.js');
+    document.querySelector('#root').remove();
+    const host=document.createElement('div'); host.style.width='900px'; document.body.append(host);
+    const root=createRoot(host); window.shutterCalls=[];
+    window.renderShutter=(props={})=>root.render(React.createElement(Gallery,{items,onOpenChange:n=>window.shutterCalls.push(n),...props}));
+    window.renderShutter({open:1});
+  });
+  await page.waitForTimeout(150); await panel(2).click();
+  assert.equal(await panel(1).getAttribute('aria-expanded'),'true','controlled parent owns selection');
+  assert.deepEqual(await page.evaluate(()=>window.shutterCalls),[2]);
+  await page.evaluate(()=>window.renderShutter({open:2})); await page.waitForTimeout(100);
+  assert.equal(await panel(2).getAttribute('aria-expanded'),'true');
+  await page.keyboard.press('Escape'); assert.deepEqual(await page.evaluate(()=>window.shutterCalls),[2,null]);
+  await page.evaluate(()=>window.renderShutter({open:99})); await page.waitForTimeout(100);
+  assert.equal(await page.locator('.sg-panel[aria-expanded=true]').count(),0);
+  await page.evaluate(()=>window.renderShutter({items:[]})); await page.waitForTimeout(100);
+  assert.equal(await page.locator('.sg-empty').innerText(),'No images to display');
+  await page.evaluate(()=>window.renderShutter({items:[{src:'/missing-shutter-test.webp',alt:'A missing photograph',title:'Fallback'}],open:0}));
+  await page.locator('.sg-fallback').waitFor(); assert.equal(await page.locator('.sg-fallback').getAttribute('aria-label'),'A missing photograph');
+  // Documentation, source tabs, customization, route and archive are real.
+  await page.goto(`${base}/components/shutter-gallery`,{waitUntil:'networkidle'});
+  assert.equal(await page.getByRole('heading',{name:'Shutter Gallery',exact:true}).count(),1);
+  await page.getByRole('button',{name:'Customize',exact:true}).click();
+  await page.getByLabel('Gallery height',{exact:true}).fill('600'); await page.waitForTimeout(450);
+  assert.ok((await page.locator('iframe').getAttribute('src')).includes('height=600'));
+  await page.getByRole('tab',{name:'Usage',exact:true}).click(); assert.ok((await page.locator('pre').first().innerText()).includes('height={600}'));
+  await page.getByRole('tab',{name:'Component',exact:true}).click(); assert.ok((await page.locator('pre').first().innerText()).includes('function ShutterGallery'));
+  assert.equal((await page.request.get(`${base}/downloads/shutter-gallery.zip`)).status(),200);
+  assert.deepEqual(errors,[]); console.log('PASS Shutter Gallery: geometry, crop, hover/switch/toggle, keyboard, touch, breakpoint, reduced motion, docs and download.');
+} finally { await browser.close(); }

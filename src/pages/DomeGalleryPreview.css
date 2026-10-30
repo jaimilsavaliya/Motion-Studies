@@ -1,0 +1,8 @@
+.dg-preview { position:relative; width:100%; min-height:100svh; padding:0; }
+.dg-preview > .dome-gallery { width:100%; min-height:100svh; }
+.dg-preview-back,.dg-preview-controls { position:absolute; z-index:30; color:#f7f4f8; border:1px solid #ffffff26; background:#120f17d9; border-radius:24px; padding:7px 11px; font:10px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; }
+.dg-preview-back { top:16px; left:18px; }
+.dg-preview-controls { right:18px; bottom:16px; display:flex; align-items:center; gap:8px; }
+.dg-preview-controls button { border:1px solid #ffffff2b; background:#ffffff12; color:inherit; border-radius:16px; padding:3px 9px; font:inherit; cursor:pointer; }
+.dg-preview-back:focus-visible,.dg-preview-controls button:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+@media(max-width:620px){ .dg-preview > .dome-gallery { min-height:100svh; } .dg-preview-controls { left:18px; right:auto; } }

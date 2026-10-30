@@ -1,0 +1,13 @@
+.paper-crumple { position:relative; width:100%; height:var(--pc-height,560px); min-height:180px; overflow:hidden; isolation:isolate; background:#120f17; color:#f4f0e8; }
+.paper-crumple__canvas { position:absolute; inset:0; display:block; width:100%; height:100%; }
+.paper-crumple__hit,.paper-crumple__focus { position:absolute; left:0; top:0; margin:0; border:0; padding:0; }
+.paper-crumple__hit { z-index:2; min-width:28px; min-height:28px; background:transparent; cursor:grab; touch-action:none; outline:none; }
+.paper-crumple__hit:active { cursor:grabbing; }
+.paper-crumple__hit:focus-visible + .paper-crumple__focus { outline:2px solid #fff8e7; outline-offset:4px; border-radius:2px; }
+.paper-crumple__focus { z-index:1; pointer-events:none; }
+.paper-crumple__fallback { display:none; position:absolute; inset:24px; z-index:0; width:calc(100% - 48px); height:calc(100% - 48px); object-fit:contain; }
+.paper-crumple--fallback .paper-crumple__canvas,.paper-crumple--fallback .paper-crumple__hit,.paper-crumple--fallback .paper-crumple__focus { display:none; }
+.paper-crumple--fallback .paper-crumple__fallback { display:block; }
+.paper-crumple--disabled .paper-crumple__hit { cursor:not-allowed; }
+.paper-crumple__sr { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+@media (max-width:640px) { .paper-crumple { min-height:320px; } }

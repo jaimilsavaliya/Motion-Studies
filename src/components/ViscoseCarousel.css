@@ -1,0 +1,416 @@
+/*
+ * Viscose Carousel stage styles.
+ * Derived from the MIT-licensed Viscose Carousel by Yousuf Soomro (2026),
+ * adapted only to scope the original full-screen stage to this library.
+ * Upstream: https://github.com/Yousuf-developer/Viscose-carousel
+ */
+
+@property --glow {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0e0e0d;
+}
+
+.viscose-original {
+  --paper: #0e0e0d;
+  --ink: #efece6;
+  --ink-2: color-mix(in srgb, var(--ink) 55%, transparent);
+  --rule-a: .15;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate;
+  display: block;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Arial, Helvetica, ui-sans-serif, system-ui, sans-serif;
+  font-synthesis: none;
+}
+.viscose-original *, .viscose-original *::before, .viscose-original *::after { box-sizing: border-box; }
+.viscose-original ul { margin: 0; padding: 0; list-style: none; }
+.viscose-original h1, .viscose-original h2, .viscose-original h3, .viscose-original p,
+.viscose-original dl, .viscose-original dd, .viscose-original figure { margin: 0; }
+.viscose-original button { font: inherit; }
+
+/* Minimal, component-scoped replacement for the handful of Tailwind utility
+   declarations used by the upstream JSX. No utility framework is required. */
+.viscose-original .fixed { position: fixed; }
+.viscose-original .absolute { position: absolute; }
+.viscose-original .relative { position: relative; }
+.viscose-original .inset-0 { inset: 0; }
+.viscose-original .inset-x-0 { left: 0; right: 0; }
+.viscose-original .left-1\/2 { left: 50%; }
+.viscose-original .top-1\/2 { top: 50%; }
+.viscose-original .z-10 { z-index: 10; }
+.viscose-original .z-20 { z-index: 20; }
+.viscose-original .z-30 { z-index: 30; }
+.viscose-original .-z-20 { z-index: -20; }
+.viscose-original .pointer-events-none { pointer-events: none; }
+.viscose-original .pointer-events-auto { pointer-events: auto; }
+.viscose-original .touch-none { touch-action: none; }
+.viscose-original .-translate-x-1\/2 { transform: translateX(-50%); }
+.viscose-original .-translate-y-1\/2 { transform: translateY(-50%); }
+.viscose-original .overflow-y-auto { overflow-y: auto; }
+.viscose-original .overscroll-contain { overscroll-behavior: contain; }
+.viscose-original .opacity-0 { opacity: 0; }
+.viscose-original .flex { display: flex; }
+.viscose-original .grid { display: grid; }
+.viscose-original .block { display: block; }
+.viscose-original .flex-col { flex-direction: column; }
+.viscose-original .items-center { align-items: center; }
+.viscose-original .items-start { align-items: flex-start; }
+.viscose-original .items-end { align-items: flex-end; }
+.viscose-original .items-baseline { align-items: baseline; }
+.viscose-original .justify-between { justify-content: space-between; }
+.viscose-original .text-right { text-align: right; }
+.viscose-original .text-left { text-align: left; }
+.viscose-original .whitespace-nowrap { white-space: nowrap; }
+.viscose-original .leading-none { line-height: 1; }
+.viscose-original .leading-\[1\.22\] { line-height: 1.22; }
+.viscose-original .leading-\[1\.3\] { line-height: 1.3; }
+.viscose-original .leading-\[1\.4\] { line-height: 1.4; }
+.viscose-original .tracking-\[-0\.03em\] { letter-spacing: -.03em; }
+.viscose-original .tracking-\[-0\.015em\] { letter-spacing: -.015em; }
+.viscose-original .tracking-\[-0\.01em\] { letter-spacing: -.01em; }
+.viscose-original .tracking-\[-0\.005em\] { letter-spacing: -.005em; }
+.viscose-original .tracking-\[0\.01em\] { letter-spacing: .01em; }
+.viscose-original .text-\(--ink\) { color: var(--ink); }
+.viscose-original .m-0 { margin: 0; }
+.viscose-original .mt-\[0\.8vh\] { margin-top: .8vh; }
+.viscose-original .mt-\[1\.6vh\] { margin-top: 1.6vh; }
+.viscose-original .mt-\[2\.4vh\] { margin-top: 2.4vh; }
+.viscose-original .mt-\[18vh\] { margin-top: 18vh; }
+.viscose-original .mb-\[10vh\] { margin-bottom: 10vh; }
+.viscose-original .w-full { width: 100%; }
+.viscose-original .w-fit { width: fit-content; }
+.viscose-original .max-w-\[22em\] { max-width: 22em; }
+.viscose-original .shrink-0 { flex-shrink: 0; }
+.viscose-original .aspect-\[3\/2\] { aspect-ratio: 3 / 2; }
+.viscose-original .cursor-pointer { cursor: pointer; }
+.viscose-original .appearance-none { appearance: none; }
+.viscose-original .border-0 { border-width: 0; }
+.viscose-original .border-t { border-top-width: 1px; }
+.viscose-original .border-transparent { border-color: transparent; }
+.viscose-original .bg-transparent { background-color: transparent; }
+.viscose-original .p-0 { padding: 0; }
+.viscose-original .pt-\[2\.6vh\] { padding-top: 2.6vh; }
+.viscose-original .pt-\[3vh\] { padding-top: 3vh; }
+.viscose-original .gap-\[2\.4vh\] { gap: 2.4vh; }
+.viscose-original .gap-x-\[2vw\] { column-gap: 2vw; }
+.viscose-original .gap-y-\[5vh\] { row-gap: 5vh; }
+.viscose-original .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.viscose-original .grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.viscose-original .col-span-12 { grid-column: span 12 / span 12; }
+.viscose-original .mix-blend-soft-light { mix-blend-mode: soft-light; }
+.viscose-original .\[scrollbar-width\:none\] { scrollbar-width: none; }
+.viscose-original .\[scrollbar-width\:none\]::-webkit-scrollbar { display: none; }
+.viscose-original .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.viscose-original .focus-visible\:outline-none:focus-visible { outline: 2px solid transparent; outline-offset: 2px; }
+@media (min-width: 641px) {
+  .viscose-original .tablet\:flex-row { flex-direction: row; }
+  .viscose-original .tablet\:items-end { align-items: flex-end; }
+  .viscose-original .tablet\:justify-between { justify-content: space-between; }
+  .viscose-original .tablet\:gap-\[3vw\] { gap: 3vw; }
+  .viscose-original .tablet\:w-\[26\%\] { width: 26%; }
+}
+@media (min-width: 1025px) {
+  .viscose-original .wide\:col-span-5 { grid-column: span 5 / span 5; }
+  .viscose-original .wide\:col-span-6 { grid-column: span 6 / span 6; }
+  .viscose-original .wide\:col-start-7 { grid-column-start: 7; }
+}
+
+/* The room. Defaults here so the first paint is right; overwritten at mount
+   from params.paper / params.ink so the dev panel can retheme live. */
+.viscose-original {
+  --paper: #0e0e0d;
+  --ink: #efece6;
+  /* A second voice: in the colour, not the opacity the entry animates. */
+  --ink-2: color-mix(in srgb, var(--ink) 55%, transparent);
+  /* The page's hairlines: the ink at this strength. The shader draws them
+     (data-gl="rule") and reads it from here. */
+  --rule-a: 0.15;
+  color-scheme: dark; /* retheme() flips this with the room */
+}
+
+/* Film over everything. The grain is one tile of fractal noise, desaturated;
+   its strength is the element's opacity, set from params. */
+.viscose-original .grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+}
+
+/* The room, under the work: the vignette over the glow over the paper, in
+   one element. One element because a gradient over dark paper spans only a
+   handful of eight-bit levels, and painted as a layer of its own it is
+   rounded to them on its own: the falloffs showed as rings a level apart.
+   Painted over a tile of the paper carrying ±1 level of noise (--dither, from
+   retheme), each gradient is rounded once, against the noise, and comes out
+   smooth. So their strengths ride in their colours (--glow-a, --glow-on,
+   --vig), never in an opacity, which would composite them apart again.
+
+   The glow is the room's light behind the front card. Gaussian, not a
+   linear ramp to a hard stop: the eye finds the end of a linear ramp — a
+   Mach band — and reads the glow as a disc with an edge. Placed on the front
+   of the ring by the layout loop (--glow-x, --glow-y). The vignette is the
+   room falling away toward its corners; under the work, so a card or a word
+   passing near an edge keeps its own tone. */
+.viscose-original .room {
+  --k: calc(var(--glow-a, 0) * var(--glow-on, 0));
+  background:
+    radial-gradient(
+      ellipse farthest-corner at 50% 50%,
+      transparent 45%,
+      color-mix(in srgb, #000 calc(8% * var(--vig, 0)), transparent) 60%,
+      color-mix(in srgb, #000 calc(22% * var(--vig, 0)), transparent) 75%,
+      color-mix(in srgb, #000 calc(38% * var(--vig, 0)), transparent) 88%,
+      color-mix(in srgb, #000 calc(50% * var(--vig, 0)), transparent) 100%
+    ),
+    radial-gradient(
+      var(--glow-w, 64vw) var(--glow-h, 45vw) at var(--glow-x, 50%)
+        var(--glow-y, 50%),
+      color-mix(in oklab, var(--glow) calc(100% * var(--k)), transparent) 0%,
+      color-mix(in oklab, var(--glow) calc(86% * var(--k)), transparent) 12%,
+      color-mix(in oklab, var(--glow) calc(62% * var(--k)), transparent) 25%,
+      color-mix(in oklab, var(--glow) calc(38% * var(--k)), transparent) 38%,
+      color-mix(in oklab, var(--glow) calc(20% * var(--k)), transparent) 50%,
+      color-mix(in oklab, var(--glow) calc(9% * var(--k)), transparent) 62%,
+      color-mix(in oklab, var(--glow) calc(3.5% * var(--k)), transparent) 75%,
+      color-mix(in oklab, var(--glow) calc(1% * var(--k)), transparent) 88%,
+      transparent 100%
+    ),
+    var(--dither, none) 0 0 / 64px 64px;
+}
+
+/* The grain is a soft-light pass in the dark room and a multiply in the
+   light one, where soft light over paper does nothing. Set by params. */
+.viscose-original .grain[data-blend="multiply"] {
+  mix-blend-mode: multiply;
+}
+.viscose-original .grain[data-blend="overlay"] {
+  mix-blend-mode: overlay;
+}
+
+.viscose-original {
+  height: 100%;
+  margin: 0;
+  color: var(--ink);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* On the root only. The project's name sits at a negative z-index so the
+   ring passes in front of it, and a background on body would paint over
+   anything below z-auto. */
+.viscose-original {
+  background: var(--paper);
+}
+
+.viscose-original canvas {
+  display: block;
+}
+
+/* The project page's pictures and clips. Each figure is a box the shader
+   paints; its slot (set by setOpenCopy from the shapes in order) places it
+   on the page's twelve columns, its shape gives it its proportion. Figures
+   are subgrids of the page, so every slot lines up with the strip of facts
+   above. No captions are printed beside the pictures: the words live in the
+   insights row instead, never pressed against a picture. */
+.viscose-original .media {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 2vw;
+}
+.viscose-original .media-fig {
+  grid-column: 1 / -1;
+  margin: 0;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: start;
+}
+.viscose-original .media-fig + .media-fig {
+  margin-top: 8vh;
+}
+.viscose-original .media-box {
+  grid-column: 1 / -1;
+  aspect-ratio: 3 / 2;
+}
+.viscose-original .media-fig[data-shape="port"] .media-box {
+  aspect-ratio: 4 / 5;
+}
+.viscose-original .media-fig[data-shape="wide"] .media-box {
+  aspect-ratio: 16 / 9;
+}
+
+/* Up to the tablet band: one column, portraits narrower and alternating
+   sides so a run of them still has a rhythm. */
+.viscose-original .media-fig[data-shape="port"] .media-box {
+  grid-column: 1 / span 9;
+}
+.viscose-original .media-fig[data-slot="pair-b"] .media-box,
+.viscose-original .media-fig[data-slot="port-r"] .media-box {
+  grid-column: 4 / -1;
+}
+
+/* Three insights, a row between the opening pictures and the rest:
+   numbered heads in the small caps, a sentence or two under each, a
+   hairline over each one. Stacked up to the tablet band. */
+.viscose-original .insights {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: 5vh;
+  margin-top: 10vh;
+}
+.viscose-original .insight {
+  grid-column: 1 / -1;
+  /* Room for its rule, which the shader draws (data-gl="rule"). */
+  border-top: 1px solid transparent;
+  padding-top: 2.6vh;
+}
+
+@media (min-width: 1025px) {
+  /* One even gap between every piece — nothing pulled up into another
+     picture's space. */
+  .viscose-original .media-fig + .media-fig {
+    margin-top: 14vh;
+  }
+
+  /* The large picture, on the right. */
+  .viscose-original .media-fig[data-slot="lead"] .media-box {
+    grid-column: 6 / -1;
+  }
+
+  /* The smaller one, on the left. */
+  .viscose-original .media-fig[data-slot="offset"] .media-box {
+    grid-column: 1 / span 5;
+  }
+
+  /* A clip across the page. */
+  .viscose-original .media-fig[data-slot="wide"] .media-box {
+    grid-column: 2 / span 10;
+  }
+
+  /* Portraits in a pair, the second a short step below the first. */
+  .viscose-original .media-fig[data-slot="pair-a"] {
+    grid-column: 1 / span 6;
+  }
+  .viscose-original .media-fig[data-slot="pair-b"] {
+    grid-column: 7 / span 6;
+    margin-top: 22vh;
+  }
+  .viscose-original .media-fig[data-slot="pair-a"]:first-child + .media-fig[data-slot="pair-b"] {
+    margin-top: 8vh;
+  }
+  .viscose-original .media-fig[data-slot="pair-a"] .media-box,
+  .viscose-original .media-fig[data-slot="pair-b"] .media-box {
+    grid-column: 2 / span 4;
+  }
+
+  /* A portrait alone, on the right or the left. */
+  .viscose-original .media-fig[data-slot="port-r"] .media-box {
+    grid-column: 8 / span 4;
+  }
+  .viscose-original .media-fig[data-slot="port-l"] .media-box {
+    grid-column: 2 / span 4;
+  }
+
+  /* The insights three across, each in four of the twelve columns. */
+  .viscose-original .insights {
+    margin-top: 16vh;
+  }
+  .viscose-original .insight {
+    grid-column: span 4;
+    padding-right: 3vw;
+  }
+}
+
+/* Close, on an opened page. A disc of the page's own colour with a hairline
+   ring and a cross: against the page it is barely a shape, over a picture it
+   is a dark lens the cross reads on, so it needs no backing that comes and
+   goes. Hover fills it with ink and turns the cross a quarter on a spring;
+   the open timeline opens the disc and draws the strokes. */
+.viscose-original .close {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.viscose-original .close-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ink) 26%, transparent);
+  transition:
+    background-color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.viscose-original .close-x {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Over a scrolled page the page fades out under it instead of being cut at
+   its rim: a soft field of the paper, up once there is something under it
+   (--halo, from the layout loop). */
+.viscose-original .close::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--paper) 85%, transparent) 62%,
+    transparent
+  );
+  opacity: var(--halo, 0);
+  pointer-events: none;
+  z-index: -1;
+}
+.viscose-original .close-stroke {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  margin: -0.75px 0 0 -7px;
+  border-radius: 1px;
+  background: var(--ink);
+  transition: background-color 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.viscose-original .close:hover .close-disc,
+.viscose-original[data-keys] .close:focus-visible .close-disc {
+  background: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.viscose-original .close:hover .close-stroke,
+.viscose-original[data-keys] .close:focus-visible .close-stroke {
+  background: var(--paper);
+}
+.viscose-original .close:hover .close-x,
+.viscose-original[data-keys] .close:focus-visible .close-x {
+  transform: rotate(90deg);
+}
+.viscose-original .close:active .close-x {
+  transform: rotate(90deg) scale(0.82);
+}
+/* Focus shows only once the keyboard is in use (data-keys, set on Tab): the
+   open moves focus here by script, and some browsers count that as visible
+   focus even after a click. */
+.viscose-original .close:focus-visible {
+  outline: none;
+}
+.viscose-original[data-keys] .close:focus-visible {
+  outline: 1px solid color-mix(in oklab, var(--ink) 55%, transparent);
+  outline-offset: 3px;
+}

@@ -1,0 +1,5 @@
+.tt-playground .tt-text-input { grid-column:span 2; }
+.tt-playground .tt-color-input > div { display:flex; gap:10px; align-items:center; min-height:32px; }
+.tt-playground .tt-color-input input[type="color"] { width:32px; height:28px; padding:2px; flex:none; border:1px solid var(--border,#333); background:transparent; border-radius:5px; cursor:pointer; }
+.tt-playground .tt-color-input code { font-size:11px; color:var(--muted,#999); }
+@media(max-width:600px) { .tt-playground .tt-text-input { grid-column:1 / -1; } }

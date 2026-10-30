@@ -1,0 +1,16 @@
+.ms-ascii-preview { position:relative; width:100%; min-height:100svh; overflow:hidden; background:#101016; color:#f7f9ff; font-family:Arial,sans-serif; }
+.ms-ascii-preview[data-light=true] { background:#f5f7fb; color:#172033; }
+.ga-preview-back { position:absolute; top:20px; left:24px; z-index:2; font:10px monospace; padding:8px 12px; border-radius:20px; background:#101016bd; color:#e7eeff; }
+.ga-preview-footer { position:absolute; bottom:18px; left:22px; right:22px; display:flex; justify-content:space-between; align-items:center; gap:16px; z-index:2; }
+.ga-preview-footer>span { font:8px/1.5 monospace; letter-spacing:1.2px; opacity:.5; }
+.ga-preview-controls { display:flex; border:1px solid #98a8d338; border-radius:999px; padding:4px; background:#101016bb; color:#e7eeff; backdrop-filter:blur(12px); }
+.ga-preview-controls button { display:flex; align-items:center; gap:7px; padding:7px 10px; font:11px Arial,sans-serif; border:0; background:none; color:inherit; border-radius:999px; cursor:pointer; }
+.ga-preview-controls button:hover { background:#ffffff16; }
+.ga-preview-controls button:focus-visible { outline:2px solid #aac6ff; outline-offset:2px; }
+.ms-ascii-preview[data-light=true] .ga-preview-controls { background:#fffdf5cf; color:#172033; }
+.ga-demo-content { position:absolute; z-index:1; left:clamp(24px,6vw,70px); bottom:100px; right:24px; }
+.ga-demo-content>span { font:9px/1.6 monospace; letter-spacing:2px; opacity:.65; }
+.ga-demo-content h1 { margin:18px 0; font-size:clamp(34px,5vw,64px); font-weight:500; line-height:1.05; letter-spacing:-2.5px; }
+.ga-demo-content p { font-size:13px; opacity:.65; }
+.ga-demo-content>a { display:inline-flex; align-items:center; gap:24px; padding:12px 16px; border:1px solid #8994ac66; border-radius:6px; font:11px Arial,sans-serif; margin-top:8px; color:inherit; }
+@media(max-width:600px) { .ga-preview-footer { left:16px; right:16px; }.ga-preview-footer>span { max-width:145px; text-align:right; font-size:7px; letter-spacing:.7px; }.ga-demo-content h1 { letter-spacing:-1.5px; } }

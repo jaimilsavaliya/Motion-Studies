@@ -1,0 +1,7 @@
+@font-face { font-family:'Geist'; src:url('../assets/tech-text/Geist.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap; }
+@font-face { font-family:'Geist Mono'; src:url('../assets/tech-text/GeistMono.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap; }
+.ms-tech-text-preview { position:relative; width:100%; height:100svh; min-height:200px; color:#fff; background:#120f17; font-family:'Geist',Arial,sans-serif; }
+.tt-preview-back,.tt-preview-pause { position:absolute; z-index:2; color:#b8b4c0; background:#120f17df; border:1px solid #ffffff1b; border-radius:24px; padding:7px 11px; font:10px/1.5 ui-monospace,monospace; }
+.tt-preview-back { top:16px; left:18px; }
+.tt-preview-pause { bottom:16px; right:18px; cursor:pointer; }
+.tt-preview-back:focus-visible,.tt-preview-pause:focus-visible { outline:2px solid #fff; outline-offset:3px; }
